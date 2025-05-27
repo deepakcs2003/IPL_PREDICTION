@@ -37,7 +37,7 @@ document.getElementById('cricketForm').addEventListener('submit', function (e) {
         city: formData.get('city'),
         run_left: runLeft,
         balls_left: Math.round(ballsLeft),
-        wickets: wicketsDown,
+        wickets: Math.abs(wicketsDown - 10),
         total_runs_x: totalTarget,
         crr: parseFloat(crr),
         rrr: parseFloat(rrr)
@@ -53,21 +53,15 @@ async function makePrediction(predictionData) {
     try {
         console.log('Prediction data:', predictionData);
 
-        // Uncomment for real API call
-        // const response = await fetch('http://127.0.0.1:8000/predict', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(predictionData)
-        // });
-        // const result = await response.json();
-
-        // Sample prediction result for demo
-        const result = {
-            win: Math.random() * 100,
-            lose: Math.random() * 100
-        };
+        const response = await fetch('https://ipl-prediction-5-3tjg.onrender.com/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(predictionData)
+        });
+        const result = await response.json();
+        console.log('Prediction result:', result);
 
         // Normalize percentages to sum to 100
         const total = result.win + result.lose;
